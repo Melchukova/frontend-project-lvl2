@@ -1,0 +1,30 @@
+{
+  "name": "@melchukova/frontend-project-lvl2",
+  "version": "0.0.1",
+  "description": "Difference calculator",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Melchukova/frontend-project-lvl2.git"
+  },
+  "author": "Melchukova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Melchukova/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/Melchukova/frontend-project-lvl2#readme",
+  "bin": {
+    "gendif": "/bin/gendif.js"
+  },
+  "dependencies": {
+    "commander": "^5.1.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.10.4"
+  }
+}
