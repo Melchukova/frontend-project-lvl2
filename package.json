@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "Difference calculator",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "NODE_ENV=production babel src --out-dir dist",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -16,11 +18,14 @@
   },
   "homepage": "https://github.com/Melchukova/frontend-project-lvl2#readme",
   "bin": {
-    "gendif": "/bin/gendif.js"
+    "gendif": "/dist/bin/gendif.js"
   },
   "dependencies": {
     "commander": "^5.1.0"
   },
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
