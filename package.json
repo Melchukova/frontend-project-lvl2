@@ -1,6 +1,6 @@
 {
   "name": "@melchukova/frontend-project-lvl2",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Difference calculator",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,11 +17,13 @@
     "url": "https://github.com/Melchukova/frontend-project-lvl2/issues"
   },
   "homepage": "https://github.com/Melchukova/frontend-project-lvl2#readme",
+  "main": "dist/find-difference.js",
   "bin": {
     "gendif": "/dist/bin/gendif.js"
   },
   "dependencies": {
-    "commander": "^5.1.0"
+    "commander": "^5.1.0",
+    "lodash": "^4.17.19"
   },
   "files": [
     "dist"
@@ -30,6 +32,9 @@
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",
     "@babel/node": "^7.10.5",
-    "@babel/preset-env": "^7.10.4"
+    "@babel/preset-env": "^7.10.4",
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
   }
 }

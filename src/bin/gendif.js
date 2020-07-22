@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import commander from '../commander.js';
+import useCommander from '../commander-options.js';
 
-commander();
+useCommander();
