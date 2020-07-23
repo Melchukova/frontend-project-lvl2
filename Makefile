@@ -16,3 +16,6 @@ tst:
 
 jest:
 	npm run test
+
+test-coverage:
+	npx jest --coverage

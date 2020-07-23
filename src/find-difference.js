@@ -9,6 +9,7 @@ const getJSONObjectFromPath = (path) => {
 
 const findDifference = (filepath1, filepath2) => {
   const obj1 = getJSONObjectFromPath(filepath1);
+
   const obj2 = getJSONObjectFromPath(filepath2);
 
   const entries1 = Object.entries(obj1);
