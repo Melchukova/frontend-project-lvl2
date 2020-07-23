@@ -12,4 +12,7 @@ lint:
 	npx eslint .
 
 tst:
-	npx babel-node src/bin/gendif.js /test-files/file1.json /test-files/file2.json
+	npx babel-node src/bin/gendif.js __fixtures__/file1.json __fixtures__/file2.json
+
+jest:
+	npm run test

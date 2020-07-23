@@ -35,9 +35,8 @@ const findDifference = (filepath1, filepath2) => {
   });
 
   const differenceStr = differenceObj.map((obj) => `  ${obj.diff} ${obj.key}: ${obj.value}`).join('\n');
-  const resultForPrint = `{\n${differenceStr}\n}`;
 
-  console.log(resultForPrint);
+  return `{\n${differenceStr}\n}`;
 };
 
 export default findDifference;
