@@ -1,7 +1,7 @@
 # frontent-project-lvl2: Вычислитель отличий
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/0252d61fc158cc046f34/maintainability)](https://codeclimate.com/github/Melchukova/frontend-project-lvl2/maintainability)
-[![Main actions](https://github.com/Melchukova/frontend-project-lvl2/workflows/.github/workflows/main.yml/badge.svg)](https://github.com/Melchukova/frontend-project-lvl2/actions)
+[![Push actions](https://github.com/Melchukova/frontend-project-lvl2/workflows/Push-actions/badge.svg)](https://github.com/Melchukova/frontend-project-lvl2/actions)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0252d61fc158cc046f34/test_coverage)](https://codeclimate.com/github/Melchukova/frontend-project-lvl2/test_coverage)
 
 Утилита для поиска отличий в конфигурационных файлах.
