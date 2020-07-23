@@ -24,7 +24,7 @@ jobs:
 
     - name: test JSON
       run: 
-        make jest
+        make test
 
     - name: coverage
       uses: paambaati/codeclimate-action@v2.6.0
