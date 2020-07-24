@@ -1,11 +1,10 @@
 {
   "name": "@melchukova/frontend-project-lvl2",
   "version": "0.0.3",
-  "description": "Difference calculator",
+  "description": "Compares two configuration files and shows a difference",
+  "type": "module",
   "scripts": {
-    "test": "npx jest",
-    "build": "NODE_ENV=production babel src --out-dir dist",
-    "prepublishOnly": "npm run build"
+    "test": "npx -n --experimental-vm-modules jest"
   },
   "repository": {
     "type": "git",
@@ -19,21 +18,13 @@
   "homepage": "https://github.com/Melchukova/frontend-project-lvl2#readme",
   "main": "dist/find-difference.js",
   "bin": {
-    "gendif": "/dist/bin/gendif.js"
+    "gendif": "/src/bin/gendif.js"
   },
   "dependencies": {
     "commander": "^5.1.0",
     "lodash": "^4.17.19"
   },
-  "files": [
-    "dist"
-  ],
   "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.10.5",
-    "@babel/node": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
-    "babel-jest": "^26.1.0",
     "eslint": "^7.5.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",

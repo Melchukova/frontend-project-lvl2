@@ -1,11 +1,21 @@
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import findDifference from '../src/find-difference.js';
-// import { dirname } from 'path';
+
+let __filename;
+let __dirname;
+
+beforeAll(() => {
+  __filename = fileURLToPath(import.meta.url);
+  __dirname = dirname(__filename);
+});
+
+const getFixturePath = (filename) => join(__dirname, '..', '__fixtures__', filename);
 
 describe('find difference', () => {
   test('for JSON', () => {
-    // const __dirname =
-    const filepath1 = '__fixtures__/file1.json';
-    const filepath2 = '__fixtures__/file2.json';
+    const filepath1 = getFixturePath('file1.json');
+    const filepath2 = getFixturePath('file2.json');
     const difference = findDifference(filepath1, filepath2);
     expect(difference).toMatch('- follow: false');
     expect(difference).toMatch('  host: hexlet.io');
