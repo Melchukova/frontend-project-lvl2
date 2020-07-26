@@ -7,10 +7,12 @@
 Утилита для поиска отличий в конфигурационных файлах.
 ____
 ### Демонстрация
-| Формат | |
+| Дйствие | |
 |----|----|
-| JSON | [![asciicast](https://asciinema.org/a/85TVIpd7p7ZOO1GGuSVZrRWYD.png)](https://asciinema.org/a/85TVIpd7p7ZOO1GGuSVZrRWYD) |
-| YAML | [![asciicast](https://asciinema.org/a/NdX6FHo7rFS0qy44nlHgRVuli.png)](https://asciinema.org/a/NdX6FHo7rFS0qy44nlHgRVuli) |
+| вывод справки и версии | [![asciicast](    https://asciinema.org/a/oFFWz16SBcn62wb0NZ9SolkY1.png)](https://asciinema.org/a/oFFWz16SBcn62wb0NZ9SolkY1) |
+| сравнение JSON | [![asciicast](https://asciinema.org/a/Tc6r70PdAoGp1LBpn4SGcmu16.png)](https://asciinema.org/a/Tc6r70PdAoGp1LBpn4SGcmu16) |
+| сравнение YAML | [![asciicast](https://asciinema.org/a/NdX6FHo7rFS0qy44nlHgRVuli.png)](https://asciinema.org/a/NdX6FHo7rFS0qy44nlHgRVuli) |
+| сравнение ini | [![asciicast](https://asciinema.org/a/2yRHSJNsYxtDIM606wjzZxP25.png)](https://asciinema.org/a/2yRHSJNsYxtDIM606wjzZxP25) |
 
 
 Выполнено в рамках [учебного проекта Вычислитель отличий](https://ru.hexlet.io/professions/frontend/projects/46)

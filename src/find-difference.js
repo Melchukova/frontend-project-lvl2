@@ -4,7 +4,7 @@ import path from 'path';
 import getParser from './parsers.js';
 
 const getObjectFromPath = (filePath) => {
-  const content = fs.readFileSync(filePath);
+  const content = fs.readFileSync(filePath, 'utf-8');
   const format = path.extname(filePath);
   const parse = getParser(format);
   return parse(content);

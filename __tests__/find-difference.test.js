@@ -4,7 +4,7 @@ import findDifference from '../src/find-difference.js';
 
 let __filename;
 let __dirname;
-const fileExtensions = ['json', 'yml'];
+const fileExtensions = ['json', 'yml', 'ini'];
 
 beforeAll(() => {
   __filename = fileURLToPath(import.meta.url);
