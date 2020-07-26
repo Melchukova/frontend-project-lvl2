@@ -1,16 +1,19 @@
 import _ from 'lodash';
 import fs from 'fs';
+import path from 'path';
+import getParser from './parsers.js';
 
-const getJSONObjectFromPath = (path) => {
-  const fileContent = fs.readFileSync(path);
-  const object = JSON.parse(fileContent);
-  return object;
+const getObjectFromPath = (filePath) => {
+  const content = fs.readFileSync(filePath);
+  const format = path.extname(filePath);
+  const parse = getParser(format);
+  return parse(content);
 };
 
 const findDifference = (filepath1, filepath2) => {
-  const obj1 = getJSONObjectFromPath(filepath1);
+  const obj1 = getObjectFromPath(filepath1);
 
-  const obj2 = getJSONObjectFromPath(filepath2);
+  const obj2 = getObjectFromPath(filepath2);
 
   const entries1 = Object.entries(obj1);
   const entries2 = Object.entries(obj2);
