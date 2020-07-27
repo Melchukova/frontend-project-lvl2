@@ -1,0 +1,9 @@
+"rmObject": 
+  "noName1": "Value 1"
+  "noName2": 200
+"changeObject":
+  "rmVal": "123"
+  "objToVal": 
+    "abc": 12345
+  "valToObj": 5
+  "valToVal": "kia Rio"

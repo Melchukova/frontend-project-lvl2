@@ -11,7 +11,7 @@ lint:
 	npx eslint .
 
 tst:
-	node --experimental-json-modules src/bin/gendif.js __fixtures__/file1.json __fixtures__/file2.json
+	node --experimental-json-modules src/bin/gendif.js __fixtures__/before.json __fixtures__/after.json
 
 test:
 	npm test

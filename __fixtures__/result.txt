@@ -1,0 +1,29 @@
+{
+  + addObject: {
+        noName3: 800
+        noName4: {
+          noName5: str
+        }
+    }
+    changeObject: {
+      + addVal: true
+      - objToVal: {
+            abc: 12345
+        }
+      + objToVal: 886
+      - rmVal: 123
+      - valToObj: 5
+      + valToObj: {
+            newVal1: 19
+            newVal2: {
+              newVal3: newStr
+            }
+        }
+      - valToVal: kia Rio
+      + valToVal: kia Ceed
+    }
+  - rmObject: {
+        noName1: Value 1
+        noName2: 200
+    }
+}

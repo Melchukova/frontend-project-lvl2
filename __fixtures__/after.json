@@ -1,0 +1,19 @@
+{
+  "addObject": {
+    "noName3": 800,
+    "noName4": {
+      "noName5": "str"
+    }
+  },
+  "changeObject": {
+    "addVal": true,
+    "objToVal": 886,
+    "valToObj": {
+      "newVal1": 19, 
+      "newVal2": {
+        "newVal3": "newStr"
+      }
+    },
+    "valToVal": "kia Ceed"
+  }
+}

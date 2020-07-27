@@ -1,6 +1,7 @@
 import commander from 'commander';
 import packageJson from '../package.json';
 import findDifference from './find-difference.js';
+import getPrintStr from './stylish.js';
 
 const { program } = commander;
 
@@ -14,7 +15,7 @@ const useCommander = () => {
     .description(packageJson.description)
     .version(packageJson.version, '-V, --version', 'output the version number')
     .helpOption('-h, --help', 'output usage information')
-    .option('-f, --format [type]', 'output format')
+    .option('-f, --format [type]', 'output format', getPrintStr)
     .arguments('<filepath1> <filepath2>')
     .action((filepath1, filepath2) => getDifference(filepath1, filepath2));
 

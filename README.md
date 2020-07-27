@@ -13,6 +13,6 @@ ____
 | сравнение JSON | [![asciicast](https://asciinema.org/a/Tc6r70PdAoGp1LBpn4SGcmu16.png)](https://asciinema.org/a/Tc6r70PdAoGp1LBpn4SGcmu16) |
 | сравнение YAML | [![asciicast](https://asciinema.org/a/NdX6FHo7rFS0qy44nlHgRVuli.png)](https://asciinema.org/a/NdX6FHo7rFS0qy44nlHgRVuli) |
 | сравнение ini | [![asciicast](https://asciinema.org/a/2yRHSJNsYxtDIM606wjzZxP25.png)](https://asciinema.org/a/2yRHSJNsYxtDIM606wjzZxP25) |
-
+| сравнение файлов с рекурсивной структурой (JSON, YSML, ini) | [![asciicast](https://asciinema.org/a/qeFMCvhxnlIINDTxTf85rOqCm.png)](https://asciinema.org/a/qeFMCvhxnlIINDTxTf85rOqCm) |
 
 Выполнено в рамках [учебного проекта Вычислитель отличий](https://ru.hexlet.io/professions/frontend/projects/46)
