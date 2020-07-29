@@ -22,7 +22,7 @@ jobs:
       run: 
         make lint
 
-    - name: test JSON
+    - name: test gendif
       run: 
         make test
 
