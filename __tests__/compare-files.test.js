@@ -49,13 +49,4 @@ describe('find difference', () => {
       });
     });
   });
-
-  test('hexlet example', () => {
-    const beforeFilePath = getFixturePath('hexlet-example/before.json');
-    const afterFilePath = getFixturePath('hexlet-example/after.json');
-    const hexResult = getFile('hexlet-example/result.txt');
-
-    const difference = compareFiles(beforeFilePath, afterFilePath, 'stylish');
-    expect(difference).toEqual(hexResult);
-  });
 });
