@@ -27,6 +27,13 @@ const generateActionsRecs = (obj, keys, action) => {
   return recs;
 };
 
+const sortRecs = ((a, b) => {
+  if (a.key > b.key) return 1;
+  if (a.key < b.key) return -1;
+  if (a.action === 'added' || a.action === 'updated to') return 1;
+  return -1;
+});
+
 const compareObjects = (beforeObj, afterObj) => {
   const beforeKeys = Object.keys(beforeObj);
   const afterKeys = Object.keys(afterObj);
@@ -71,12 +78,7 @@ const compareObjects = (beforeObj, afterObj) => {
     ...comparedObjWithValObjects,
   ];
 
-  const recsOfComparedSorted = recsOfCompared.sort((a, b) => {
-    if (a.key > b.key) return 1;
-    if (a.key < b.key) return -1;
-    if (a.action === 'added' || a.action === 'updated to') return 1;
-    return -1;
-  });
+  const recsOfComparedSorted = recsOfCompared.sort(sortRecs);
 
   return recsOfComparedSorted;
 };
