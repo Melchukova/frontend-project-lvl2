@@ -15,13 +15,13 @@ const getActionSign = (action, key) => {
   }
 };
 
-const generateArrOfStringsForObj = (indentsAmount, obj) => {
+const generateDifStringsForObj = (indentsAmount, obj) => {
   const indent = ('  ').repeat(indentsAmount);
   const actionSign = getActionSign(obj.action, obj.key);
   if (!_.isArray(obj.value)) return `${indent}${actionSign} ${obj.key}: ${obj.value}`;
 
   // eslint-disable-next-line no-use-before-define
-  const stringsForValue = generateArrOfStringsForArr(indentsAmount + 2, obj.value);
+  const stringsForValue = generateDifStringsForArr(indentsAmount + 2, obj.value);
   return [
     `${indent}${actionSign} ${obj.key}: {`,
     stringsForValue,
@@ -29,9 +29,9 @@ const generateArrOfStringsForObj = (indentsAmount, obj) => {
   ];
 };
 
-const generateArrOfStringsForArr = (indentsAmount, arr) => {
+const generateDifStringsForArr = (indentsAmount, arr) => {
   const compexArr = arr.reduce((newArr, obj) => {
-    const arrOfStrForObj = generateArrOfStringsForObj(indentsAmount, obj);
+    const arrOfStrForObj = generateDifStringsForObj(indentsAmount, obj);
     return [newArr, arrOfStrForObj];
   }, []);
 
@@ -40,7 +40,7 @@ const generateArrOfStringsForArr = (indentsAmount, arr) => {
 };
 
 const generatePrintString = (arr) => {
-  const arrOfStr = generateArrOfStringsForArr(1, arr);
+  const arrOfStr = generateDifStringsForArr(1, arr);
   const arrOfStrWithBrackets = [
     '{',
     ...arrOfStr,

@@ -16,7 +16,7 @@
     "url": "https://github.com/Melchukova/frontend-project-lvl2/issues"
   },
   "homepage": "https://github.com/Melchukova/frontend-project-lvl2#readme",
-  "main": "dist/find-difference.js",
+  "main": "dist/compare-files.js",
   "bin": {
     "gendif": "/src/bin/gendif.js"
   },

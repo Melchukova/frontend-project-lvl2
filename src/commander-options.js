@@ -1,6 +1,6 @@
 import commander from 'commander';
 import packageJson from '../package.json';
-import findDifference from './find-difference.js';
+import findDifference from './compare-files.js';
 
 const { program } = commander;
 

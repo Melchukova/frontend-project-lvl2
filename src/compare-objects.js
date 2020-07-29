@@ -1,21 +1,17 @@
 import _ from 'lodash';
-import fs from 'fs';
-import path from 'path';
-import getParser from './parsers.js';
 import getFormatter from './formatters/index.js';
 
-const getObjectFromPath = (filePath) => {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const format = path.extname(filePath);
-  const parse = getParser(format);
-  return parse(content);
+const makeNumbersForIni = (value) => {
+  const num = Number(value);
+  const isNum = !Number.isNaN(num) && typeof value === 'string';
+  return isNum ? num : value;
 };
 
 const generateRec = (key, value, action) => ({ key, value, action });
 
 const generateRecForVal = (key, value, action) => {
   if (!_.isObject(value)) {
-    return generateRec(key, value, action);
+    return generateRec(key, makeNumbersForIni(value), action);
   }
 
   // eslint-disable-next-line no-use-before-define
@@ -85,10 +81,7 @@ const compareObjects = (beforeObj, afterObj) => {
   return recsOfComparedSorted;
 };
 
-const findDifference = (pathBeforeFile, pathAfterFile, format) => {
-  const beforeObj = getObjectFromPath(pathBeforeFile);
-  const afterObj = getObjectFromPath(pathAfterFile);
-
+const findDifference = (beforeObj, afterObj, format) => {
   const differenceArr = compareObjects(beforeObj, afterObj);
   const formatObj = getFormatter(format);
   const differenceStr = formatObj(differenceArr);

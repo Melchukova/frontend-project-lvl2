@@ -1,40 +1,51 @@
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
-import findDifference from '../src/find-difference.js';
+import compareFiles from '../src/compare-files.js';
+import compareObjects from '../src/compare-objects.js';
+import readFile from '../src/file-reader.js';
+import getParser from '../src/parsers.js';
 
 let __filename;
 let __dirname;
-const fileExtensions = ['json', 'yml', 'ini'];
-const resultFormats = ['stylish', 'plain'];
-let results;
 
 const getFixturePath = (filename) => join(__dirname, '..', '__fixtures__', filename);
 
 const getFile = (name) => {
   const path = getFixturePath(name);
-  return fs.readFileSync(path, 'utf-8');
+  return readFile(path);
 };
 
 beforeAll(() => {
   __filename = fileURLToPath(import.meta.url);
   __dirname = dirname(__filename);
-
-  results = resultFormats.reduce((obj, format) => {
-    const resultForFormat = getFile(`${format}-result.txt`);
-    return { ...obj, [format]: resultForFormat };
-  }, {});
 });
 
+const getDataForTest = (diff, format) => {
+  if (format !== 'json') {
+    return diff;
+  }
+
+  const parce = getParser('json');
+  const differenceObj = parce(diff);
+  const result = getFile('json-result.json');
+  return compareObjects(result, differenceObj, 'plain');
+};
+
 describe('find difference', () => {
+  const fileExtensions = ['json', 'yml', 'ini'];
+  const resultFormats = ['stylish', 'plain', 'json'];
+
   resultFormats.forEach((format) => {
     fileExtensions.forEach((ext) => {
       test(`format: ${format}, extensions ${ext}`, () => {
         const beforeFilePath = getFixturePath(`before.${ext}`);
         const afterFilePath = getFixturePath(`after.${ext}`);
-        const difference = findDifference(beforeFilePath, afterFilePath, format);
-        const result = results[format];
-        expect(difference).toEqual(result);
+
+        const difference = compareFiles(beforeFilePath, afterFilePath, format);
+        const dataForTest = getDataForTest(difference, format);
+
+        const result = getFile(`${format}-result.txt`);
+        expect(dataForTest).toEqual(result);
       });
     });
   });
@@ -44,7 +55,7 @@ describe('find difference', () => {
     const afterFilePath = getFixturePath('hexlet-example/after.json');
     const hexResult = getFile('hexlet-example/result.txt');
 
-    const difference = findDifference(beforeFilePath, afterFilePath, 'stylish');
+    const difference = compareFiles(beforeFilePath, afterFilePath, 'stylish');
     expect(difference).toEqual(hexResult);
   });
 });

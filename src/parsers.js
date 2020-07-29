@@ -2,18 +2,21 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 
 const parse = (format) => {
-  if (format === '.json') {
+  if (format === 'json') {
     return JSON.parse;
   }
 
-  if (format === '.yml' || format === '.yaml') {
+  if (format === 'yml' || format === 'yaml') {
     return yaml.safeLoad;
   }
 
-  if (format === '.ini') {
+  if (format === 'ini') {
     return ini.parse;
   }
 
+  if (format === 'txt') {
+    return (data) => data;
+  }
   return new Error(`Wrong file format: '${format}'. Correct format is one of [json, yml, ini]`);
 };
 

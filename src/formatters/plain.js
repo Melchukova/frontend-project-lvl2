@@ -2,8 +2,7 @@ import _ from 'lodash';
 
 const generateValStr = (val) => {
   if (_.isArray(val)) return '[complex value]';
-  const valNotANumber = Number.isNaN(+val);
-  if (typeof val === 'string' && valNotANumber === true) return `'${val}'`;
+  if (typeof val === 'string') return `'${val}'`;
   return val;
 };
 
@@ -37,7 +36,7 @@ const getAfterValueByKey = (arr, key) => {
   return afterObj.value;
 };
 
-const generateArrOfStringsForObj = (path, obj, arr) => {
+const generateDifStringsForObj = (path, obj, arr) => {
   if (obj.action === 'removed' || obj.action === 'added') {
     return generateDifStr(path, obj.key, obj.value, obj.action);
   }
@@ -50,14 +49,14 @@ const generateArrOfStringsForObj = (path, obj, arr) => {
   if (_.isArray(obj.value) && obj.action === 'not changed') {
     const newPath = `${path}${obj.key}.`;
     // eslint-disable-next-line no-use-before-define
-    return generateArrOfStringsForArr(newPath, obj.value);
+    return generateDifStringsForArr(newPath, obj.value);
   }
   return [];
 };
 
-const generateArrOfStringsForArr = (path, arr) => {
+const generateDifStringsForArr = (path, arr) => {
   const complexArr = arr.reduce((newArr, obj) => {
-    const arrOfStrForObj = generateArrOfStringsForObj(path, obj, arr);
+    const arrOfStrForObj = generateDifStringsForObj(path, obj, arr);
     return [newArr, arrOfStrForObj];
   }, []);
 
@@ -66,7 +65,7 @@ const generateArrOfStringsForArr = (path, arr) => {
 };
 
 const generatePrintStr = (arr) => {
-  const arrOfStr = generateArrOfStringsForArr('', arr);
+  const arrOfStr = generateDifStringsForArr('', arr);
 
   const printString = arrOfStr.join('\n');
 
