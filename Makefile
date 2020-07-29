@@ -11,7 +11,7 @@ lint:
 	npx eslint .
 
 tst:
-	node --experimental-json-modules src/bin/gendif.js __fixtures__/before.json __fixtures__/after.json
+	npx -n --experimental-vm-modules jest --watch
 
 test:
 	npm test

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import getParser from './parsers.js';
-import getPrintStr from './stylish.js';
+import getFormatter from './formatters/index.js';
 
 const getObjectFromPath = (filePath) => {
   const content = fs.readFileSync(filePath, 'utf-8');
@@ -11,69 +11,87 @@ const getObjectFromPath = (filePath) => {
   return parse(content);
 };
 
-const genValue = (value) => {
-  if (!_.isObject(value)) return value;
+const generateRec = (key, value, action) => ({ key, value, action });
 
-  const entries = Object.entries(value);
-  const updObj = entries.reduce((newObj, [key, val]) => ({ ...newObj, [`  ${key}`]: val }), {});
-
-  return updObj;
-};
-
-const compareElements = (key, val1, val2) => {
-  if (!_.isUndefined(val1) && _.isUndefined(val2)) {
-    return { [`- ${key}`]: genValue(val1) };
-  }
-
-  if (_.isUndefined(val1) && !_.isUndefined(val2)) {
-    return { [`+ ${key}`]: genValue(val2) };
-  }
-
-  if (!_.isObject(val1)) {
-    if (val1 === val2) {
-      return { [`  ${key}`]: val1 };
-    }
-
-    return {
-      [`- ${key}`]: val1,
-      [`+ ${key}`]: genValue(val2),
-    };
-  }
-
-  if (!_.isObject(val2)) {
-    return {
-      [`- ${key}`]: genValue(val1),
-      [`+ ${key}`]: val2,
-    };
+const generateRecForVal = (key, value, action) => {
+  if (!_.isObject(value)) {
+    return generateRec(key, value, action);
   }
 
   // eslint-disable-next-line no-use-before-define
-  const comparedObjects = compareObjects(val1, val2);
-  return {
-    [`  ${key}`]: comparedObjects,
-  };
+  const newVal = generateActionsRecs(value, Object.keys(value), 'not changed');
+  return generateRec(key, newVal, action);
 };
 
-const compareObjects = (obj1, obj2) => {
-  const allKeys = [...Object.keys(obj1), ...Object.keys(obj2)];
-  const keys = _.uniq(allKeys).sort();
+const generateActionsRecs = (obj, keys, action) => {
+  const recs = keys.reduce((arr, key) => (
+    [...arr, generateRecForVal(key, obj[key], action)]
+  ), []);
 
-  const diffObj = keys.reduce((acc, key) => {
-    const valBefore = obj1[key];
-    const valAfter = obj2[key];
+  return recs;
+};
 
-    return { ...acc, ...compareElements(key, valBefore, valAfter) };
+const compareObjects = (beforeObj, afterObj) => {
+  const beforeKeys = Object.keys(beforeObj);
+  const afterKeys = Object.keys(afterObj);
+
+  const removedKeys = _.difference(beforeKeys, afterKeys);
+  const addedKeys = _.difference(afterKeys, beforeKeys);
+  const intersectionKeys = _.intersection(afterKeys, beforeKeys);
+
+  const keysWithNotUpdatedVal = intersectionKeys.filter((key) => {
+    const beforeVal = beforeObj[key];
+    const afterVal = afterObj[key];
+
+    return beforeVal === afterVal;
+  });
+
+  const keysWithBothValIsObj = intersectionKeys.filter((key) => {
+    const beforeVal = beforeObj[key];
+    const afterVal = afterObj[key];
+
+    return _.isObject(beforeVal) && _.isObject(afterVal);
+  });
+
+  const keysWithUpdatedVal = _.difference(
+    intersectionKeys,
+    keysWithNotUpdatedVal,
+    keysWithBothValIsObj,
+  );
+
+  const comparedObjWithValObjects = keysWithBothValIsObj.reduce((arr, key) => {
+    const beforeVal = beforeObj[key];
+    const afterVal = afterObj[key];
+    const comparedVal = compareObjects(beforeVal, afterVal);
+    return [...arr, generateRec(key, comparedVal, 'not changed')];
   }, []);
 
-  return diffObj;
+  const recsOfCompared = [
+    ...generateActionsRecs(beforeObj, removedKeys, 'removed'),
+    ...generateActionsRecs(afterObj, addedKeys, 'added'),
+    ...generateActionsRecs(beforeObj, keysWithNotUpdatedVal, 'not changed'),
+    ...generateActionsRecs(beforeObj, keysWithUpdatedVal, 'updated from'),
+    ...generateActionsRecs(afterObj, keysWithUpdatedVal, 'updated to'),
+    ...comparedObjWithValObjects,
+  ];
+
+  const recsOfComparedSorted = recsOfCompared.sort((a, b) => {
+    if (a.key > b.key) return 1;
+    if (a.key < b.key) return -1;
+    if (a.action === 'added' || a.action === 'updated to') return 1;
+    return -1;
+  });
+
+  return recsOfComparedSorted;
 };
 
-const findDifference = (filepath1, filepath2) => {
-  const obj1 = getObjectFromPath(filepath1);
-  const obj2 = getObjectFromPath(filepath2);
+const findDifference = (pathBeforeFile, pathAfterFile, format) => {
+  const beforeObj = getObjectFromPath(pathBeforeFile);
+  const afterObj = getObjectFromPath(pathAfterFile);
 
-  const differenceObj = compareObjects(obj1, obj2);
-  const differenceStr = getPrintStr(differenceObj);
+  const differenceArr = compareObjects(beforeObj, afterObj);
+  const formatObj = getFormatter(format);
+  const differenceStr = formatObj(differenceArr);
 
   return differenceStr;
 };

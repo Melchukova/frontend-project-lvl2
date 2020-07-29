@@ -1,0 +1,7 @@
+Property 'addObject' was added with value: [complex value]
+Property 'changeObject.addVal' was added with value: true
+Property 'changeObject.objToVal' was updated. From [complex value] to 886
+Property 'changeObject.rmVal' was removed
+Property 'changeObject.valToObj' was updated. From 5 to [complex value]
+Property 'changeObject.valToVal' was updated. From 'kia Rio' to 'kia Ceed'
+Property 'rmObject' was removed

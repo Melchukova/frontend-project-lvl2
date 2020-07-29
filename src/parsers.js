@@ -14,7 +14,7 @@ const parse = (format) => {
     return ini.parse;
   }
 
-  return new Error('Incorrect file format');
+  return new Error(`Wrong file format: '${format}'. Correct format is one of [json, yml, ini]`);
 };
 
 export default parse;

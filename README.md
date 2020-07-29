@@ -14,5 +14,8 @@ ____
 | сравнение YAML | [![asciicast](https://asciinema.org/a/NdX6FHo7rFS0qy44nlHgRVuli.png)](https://asciinema.org/a/NdX6FHo7rFS0qy44nlHgRVuli) |
 | сравнение ini | [![asciicast](https://asciinema.org/a/2yRHSJNsYxtDIM606wjzZxP25.png)](https://asciinema.org/a/2yRHSJNsYxtDIM606wjzZxP25) |
 | сравнение файлов с рекурсивной структурой (JSON, YSML, ini) | [![asciicast](https://asciinema.org/a/qeFMCvhxnlIINDTxTf85rOqCm.png)](https://asciinema.org/a/qeFMCvhxnlIINDTxTf85rOqCm) |
+| два формата вывода результата: stylish(default), plain - по флагу '-f --format' | [![asciicast](https://asciinema.org/a/MIo33pzUzgyT1oJiePcm43j7f.png)](https://asciinema.org/a/MIo33pzUzgyT1oJiePcm43j7f) |
+
+
 
 Выполнено в рамках [учебного проекта Вычислитель отличий](https://ru.hexlet.io/professions/frontend/projects/46)

@@ -9,6 +9,11 @@
       "abc": 12345
     }, 
     "valToObj": 5, 
-    "valToVal": "kia Rio"
+    "valToVal": "kia Rio",
+    "notUpdatedVal": true,
+    "notUpdatedObj": {
+      "noName3": 156, 
+      "noName4": "QQ"
+    }
   }
 }
