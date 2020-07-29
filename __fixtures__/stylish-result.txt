@@ -16,7 +16,7 @@
             abc: 12345
         }
       + objToVal: 886
-      - rmVal: 123
+      - rmVal: 123q
       - valToObj: 5
       + valToObj: {
             newVal1: 19
