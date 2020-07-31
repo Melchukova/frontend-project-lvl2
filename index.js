@@ -1,5 +1,3 @@
-#!/usr/bin/env -S node --experimental-json-modules --no-warnings
+import compareFiles from './src/compare-files.js';
 
-import useCommander from './src/commander-options.js';
-
-useCommander();
+compareFiles();
