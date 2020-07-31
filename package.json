@@ -16,9 +16,9 @@
     "url": "https://github.com/Melchukova/frontend-project-lvl2/issues"
   },
   "homepage": "https://github.com/Melchukova/frontend-project-lvl2#readme",
-  "main": "dist/compare-files.js",
+  "main": "index.js",
   "bin": {
-    "gendif": "/src/bin/gendif.js"
+    "gendif": "index.js"
   },
   "dependencies": {
     "commander": "^5.1.0",

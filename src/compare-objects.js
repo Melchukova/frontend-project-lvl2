@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import getFormatter from './formatters/index.js';
 
-const makeNumbersForIni = (value) => {
+const makeNumberFromStr = (value) => {
   const num = Number(value);
   const isNum = !Number.isNaN(num) && typeof value === 'string';
   return isNum ? num : value;
@@ -11,7 +11,7 @@ const generateRec = (key, value, action) => ({ key, value, action });
 
 const generateRecForVal = (key, value, action) => {
   if (!_.isObject(value)) {
-    return generateRec(key, makeNumbersForIni(value), action);
+    return generateRec(key, makeNumberFromStr(value), action);
   }
 
   // eslint-disable-next-line no-use-before-define
@@ -34,26 +34,26 @@ const sortRecs = ((a, b) => {
   return -1;
 });
 
-const compareObjects = (beforeObj, afterObj) => {
-  const beforeKeys = Object.keys(beforeObj);
-  const afterKeys = Object.keys(afterObj);
+const compareObjects = (obj1, obj2) => {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
 
-  const removedKeys = _.difference(beforeKeys, afterKeys);
-  const addedKeys = _.difference(afterKeys, beforeKeys);
-  const intersectionKeys = _.intersection(afterKeys, beforeKeys);
+  const removedKeys = _.difference(keys1, keys2);
+  const addedKeys = _.difference(keys2, keys1);
+  const intersectionKeys = _.intersection(keys2, keys1);
 
   const keysWithNotUpdatedVal = intersectionKeys.filter((key) => {
-    const beforeVal = beforeObj[key];
-    const afterVal = afterObj[key];
+    const val1 = obj1[key];
+    const val2 = obj2[key];
 
-    return beforeVal === afterVal;
+    return val1 === val2;
   });
 
   const keysWithBothValIsObj = intersectionKeys.filter((key) => {
-    const beforeVal = beforeObj[key];
-    const afterVal = afterObj[key];
+    const val1 = obj1[key];
+    const val2 = obj2[key];
 
-    return _.isObject(beforeVal) && _.isObject(afterVal);
+    return _.isObject(val1) && _.isObject(val2);
   });
 
   const keysWithUpdatedVal = _.difference(
@@ -63,18 +63,18 @@ const compareObjects = (beforeObj, afterObj) => {
   );
 
   const comparedObjWithValObjects = keysWithBothValIsObj.reduce((arr, key) => {
-    const beforeVal = beforeObj[key];
-    const afterVal = afterObj[key];
-    const comparedVal = compareObjects(beforeVal, afterVal);
+    const val1 = obj1[key];
+    const val2 = obj2[key];
+    const comparedVal = compareObjects(val1, val2);
     return [...arr, generateRec(key, comparedVal, 'not changed')];
   }, []);
 
   const recsOfCompared = [
-    ...generateActionsRecs(beforeObj, removedKeys, 'removed'),
-    ...generateActionsRecs(afterObj, addedKeys, 'added'),
-    ...generateActionsRecs(beforeObj, keysWithNotUpdatedVal, 'not changed'),
-    ...generateActionsRecs(beforeObj, keysWithUpdatedVal, 'updated from'),
-    ...generateActionsRecs(afterObj, keysWithUpdatedVal, 'updated to'),
+    ...generateActionsRecs(obj1, removedKeys, 'removed'),
+    ...generateActionsRecs(obj2, addedKeys, 'added'),
+    ...generateActionsRecs(obj1, keysWithNotUpdatedVal, 'not changed'),
+    ...generateActionsRecs(obj1, keysWithUpdatedVal, 'updated from'),
+    ...generateActionsRecs(obj2, keysWithUpdatedVal, 'updated to'),
     ...comparedObjWithValObjects,
   ];
 
@@ -83,8 +83,8 @@ const compareObjects = (beforeObj, afterObj) => {
   return recsOfComparedSorted;
 };
 
-const findDifference = (beforeObj, afterObj, format) => {
-  const differenceArr = compareObjects(beforeObj, afterObj);
+const findDifference = (obj1, obj2, format) => {
+  const differenceArr = compareObjects(obj1, obj2);
   const formatObj = getFormatter(format);
   const differenceStr = formatObj(differenceArr);
 

@@ -10,11 +10,11 @@ link:
 lint: 
 	npx eslint .
 
-tst-watch:
-	npx -n --experimental-vm-modules jest --watch
-
 test:
 	npm test
 
 test-coverage:
-	npx -n --experimental-vm-modules jest --coverage
+	npm test -- --coverage
+
+test-w:
+	npm test -- --watch

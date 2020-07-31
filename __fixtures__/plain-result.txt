@@ -1,7 +1,11 @@
-Property 'addObject' was added with value: [complex value]
-Property 'changeObject.addVal' was added with value: true
-Property 'changeObject.objToVal' was updated. From [complex value] to 886
-Property 'changeObject.rmVal' was removed
-Property 'changeObject.valToObj' was updated. From 5 to [complex value]
-Property 'changeObject.valToVal' was updated. From 'kia Rio' to 'kia Ceed'
-Property 'rmObject' was removed
+Property 'common.follow' was added with value: false
+Property 'common.setting2' was removed
+Property 'common.setting3' was updated. From true to [complex value]
+Property 'common.setting4' was added with value: 'blah blah'
+Property 'common.setting5' was added with value: [complex value]
+Property 'common.setting6.doge.wow' was updated. From 'too much' to 'so much'
+Property 'common.setting6.ops' was added with value: 'vops'
+Property 'group1.baz' was updated. From 'bas' to 'bars'
+Property 'group1.nest' was updated. From [complex value] to 'str'
+Property 'group2' was removed
+Property 'group3' was added with value: [complex value]

@@ -1,52 +1,44 @@
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import compareFiles from '../src/compare-files.js';
-import compareObjects from '../src/compare-objects.js';
 import readFile from '../src/file-reader.js';
-import getParser from '../src/parsers.js';
 
-let __filename;
-let __dirname;
+let results;
 
-const getFixturePath = (filename) => join(__dirname, '..', '__fixtures__', filename);
+const getFixturePath = (filename) => {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  return join(__dirname, '..', '__fixtures__', filename);
+};
 
 const getFile = (name) => {
   const path = getFixturePath(name);
   return readFile(path);
 };
 
-beforeAll(() => {
-  __filename = fileURLToPath(import.meta.url);
-  __dirname = dirname(__filename);
-});
-
-const getDataForTest = (diff, format) => {
-  if (format !== 'json') {
-    return diff;
-  }
-
-  const parce = getParser('json');
-  const differenceObj = parce(diff);
-  const result = getFile('json-result.json');
-  return compareObjects(result, differenceObj, 'plain');
-};
-
-describe('find difference', () => {
-  const fileExtensions = ['json', 'yml', 'ini'];
+beforeEach(() => {
   const resultFormats = ['stylish', 'plain', 'json'];
 
-  resultFormats.forEach((format) => {
-    fileExtensions.forEach((ext) => {
-      test(`format: ${format}, extensions ${ext}`, () => {
-        const beforeFilePath = getFixturePath(`before.${ext}`);
-        const afterFilePath = getFixturePath(`after.${ext}`);
+  results = resultFormats.reduce((obj, format) => {
+    const result = getFile(`${format}-result.txt`);
+    return { ...obj, [format]: result };
+  }, {});
+});
 
-        const difference = compareFiles(beforeFilePath, afterFilePath, format);
-        const dataForTest = getDataForTest(difference, format);
+describe('compare files', () => {
+  describe.each([
+    ['stylish'], ['plain'], ['json'],
+  ])('print format: %s', (format) => {
+    test.each([
+      ['json'], ['yml'], ['ini'],
+    ])('files extension: %s', (ext) => {
+      const file1Path = getFixturePath(`file1.${ext}`);
+      const file2Path = getFixturePath(`file2.${ext}`);
 
-        const result = getFile(`${format}-result.txt`);
-        expect(dataForTest).toEqual(result);
-      });
+      const difference = compareFiles(file1Path, file2Path, format);
+
+      const result = results[format];
+      expect(difference).toEqual(result);
     });
   });
 });
