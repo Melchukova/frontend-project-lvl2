@@ -6,7 +6,7 @@ const generateValStr = (val) => {
   return val;
 };
 
-const generateDifStringsForArr = (path, arr) => (
+const generateDifStrings = (path, arr) => (
   arr.map((obj) => {
     if (obj.type === 'added') {
       return `Property '${path}${obj.key}' was added with value: ${generateValStr(obj.value2)}`;
@@ -22,15 +22,15 @@ const generateDifStringsForArr = (path, arr) => (
 
     if (obj.type === 'nested') {
       const newPath = `${path}${obj.key}.`;
-      return generateDifStringsForArr(newPath, obj.child);
+      return generateDifStrings(newPath, obj.child);
     }
 
     return [];
   })
 );
 
-const generatePrintStr = (arr) => {
-  const arrOfStr = generateDifStringsForArr('', arr);
+const generatePrintStr = (tree) => {
+  const arrOfStr = generateDifStrings('', tree);
 
   const printString = _.flattenDeep(arrOfStr).join('\n');
 

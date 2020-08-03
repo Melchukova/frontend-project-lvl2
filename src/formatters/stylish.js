@@ -14,8 +14,8 @@ const generateDifStringsForObj = (indentsAmount, key, value, typeSign) => {
   ];
 };
 
-const generateDifStringsForArr = (indentsAmount, arr) => {
-  const compexArr = arr.map((obj) => {
+const generateDifStringsForArr = (indentsAmount, arr) => (
+  arr.map((obj) => {
     if (obj.type === 'added') {
       return generateDifStringsForObj(indentsAmount, obj.key, obj.value2, '+');
     }
@@ -40,11 +40,8 @@ const generateDifStringsForArr = (indentsAmount, arr) => {
     }
 
     return generateDifStringsForObj(indentsAmount, obj.key, obj.value1, ' ');
-  });
-
-  const resultArr = _.flattenDeep(compexArr);
-  return resultArr;
-};
+  })
+);
 
 const generatePrintString = (tree) => {
   const arrOfStr = generateDifStringsForArr(1, tree);
@@ -54,7 +51,7 @@ const generatePrintString = (tree) => {
     '}',
   ];
 
-  const printString = arrOfStrWithBrackets.join('\n');
+  const printString = _.flattenDeep(arrOfStrWithBrackets).join('\n');
 
   return printString;
 };

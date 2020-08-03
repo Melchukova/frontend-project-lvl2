@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const compareObjects = (obj1, obj2) => {
+const buildDifferenceTree = (obj1, obj2) => {
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
   return _.union(keys1, keys2)
@@ -18,8 +18,8 @@ const compareObjects = (obj1, obj2) => {
       }
 
       if (_.isObject(value1) && _.isObject(value2)) {
-        const comparedValues = compareObjects(value1, value2);
-        return { key, child: comparedValues, type: 'nested' };
+        const tree = buildDifferenceTree(value1, value2);
+        return { key, child: tree, type: 'nested' };
       }
 
       if (value1 !== value2) {
@@ -34,4 +34,4 @@ const compareObjects = (obj1, obj2) => {
     });
 };
 
-export default compareObjects;
+export default buildDifferenceTree;
