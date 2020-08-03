@@ -1,46 +1,53 @@
 import _ from 'lodash';
 
-const getActionSign = (action, key) => {
-  switch (action) {
-    case 'removed':
-    case 'updated from':
-      return '-';
-    case 'added':
-    case 'updated to':
-      return '+';
-    case 'not changed':
-      return ' ';
-    default:
-      throw new Error(`Wrong object action: '${action}' - for key '${key}'`);
-  }
-};
-
-const generateDifStringsForObj = (indentsAmount, obj) => {
+const generateDifStringsForObj = (indentsAmount, key, value, typeSign) => {
   const indent = ('  ').repeat(indentsAmount);
-  const actionSign = getActionSign(obj.action, obj.key);
-  if (!_.isArray(obj.value)) return `${indent}${actionSign} ${obj.key}: ${obj.value}`;
+  if (!_.isObject(value)) return `${indent}${typeSign} ${key}: ${value}`;
 
-  // eslint-disable-next-line no-use-before-define
-  const stringsForValue = generateDifStringsForArr(indentsAmount + 2, obj.value);
+  const stringsForValue = Object.entries(value).map(([objKey, objValue]) => (
+    generateDifStringsForObj(indentsAmount + 2, objKey, objValue, ' ')
+  ));
   return [
-    `${indent}${actionSign} ${obj.key}: {`,
+    `${indent}${typeSign} ${key}: {`,
     stringsForValue,
     `${indent}  }`,
   ];
 };
 
 const generateDifStringsForArr = (indentsAmount, arr) => {
-  const compexArr = arr.reduce((newArr, obj) => {
-    const arrOfStrForObj = generateDifStringsForObj(indentsAmount, obj);
-    return [newArr, arrOfStrForObj];
-  }, []);
+  const compexArr = arr.map((obj) => {
+    if (obj.type === 'added') {
+      return generateDifStringsForObj(indentsAmount, obj.key, obj.value2, '+');
+    }
+
+    if (obj.type === 'removed') {
+      return generateDifStringsForObj(indentsAmount, obj.key, obj.value1, '-');
+    }
+
+    if (obj.type === 'changed') {
+      return [
+        generateDifStringsForObj(indentsAmount, obj.key, obj.value1, '-'),
+        generateDifStringsForObj(indentsAmount, obj.key, obj.value2, '+'),
+      ];
+    }
+
+    if (obj.type === 'nested') {
+      const indent = ('  ').repeat(indentsAmount);
+      return [`${indent}  ${obj.key}: {`,
+        generateDifStringsForArr(indentsAmount + 2, obj.child),
+        `${indent}  }`,
+      ];
+    }
+
+    return generateDifStringsForObj(indentsAmount, obj.key, obj.value1, ' ');
+  });
 
   const resultArr = _.flattenDeep(compexArr);
   return resultArr;
 };
 
-const generatePrintString = (arr) => {
-  const arrOfStr = generateDifStringsForArr(1, arr);
+const generatePrintString = (tree) => {
+  const arrOfStr = generateDifStringsForArr(1, tree);
   const arrOfStrWithBrackets = [
     '{',
     ...arrOfStr,
