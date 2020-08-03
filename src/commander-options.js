@@ -1,6 +1,6 @@
 import program from 'commander';
 import packageJson from '../package.json';
-import findDifference from './compare-files.js';
+import findDifference from '../index.js';
 
 const printDifference = (filepath1, filepath2, format) => {
   const difference = findDifference(filepath1, filepath2, format);

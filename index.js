@@ -1,3 +1,12 @@
-import compareFiles from './src/compare-files.js';
+import readFile from './src/file-reader.js';
+import compareObjects from './src/compare-objects.js';
 
-compareFiles();
+const findDifference = (pathFile1, pathFile2, format = 'stylish') => {
+  const obj1 = readFile(pathFile1);
+  const obj2 = readFile(pathFile2);
+
+  const difference = compareObjects(obj1, obj2, format);
+  return difference;
+};
+
+export default findDifference;
