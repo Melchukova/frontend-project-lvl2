@@ -1,8 +1,6 @@
-import commander from 'commander';
+import program from 'commander';
 import packageJson from '../package.json';
 import findDifference from './compare-files.js';
-
-const { program } = commander;
 
 const printDifference = (filepath1, filepath2, format) => {
   const difference = findDifference(filepath1, filepath2, format);
@@ -17,7 +15,6 @@ const useCommander = () => {
     .option('-f, --format [type]', 'output format', 'stylish')
     .arguments('<filepath1> <filepath2>')
     .action((filepath1, filepath2, options) => {
-      console.log('options', options.format);
       printDifference(filepath1, filepath2, options.format);
     });
 
