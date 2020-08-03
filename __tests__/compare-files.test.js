@@ -1,13 +1,7 @@
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 import compareFiles from '../src/compare-files.js';
-import readFile from '../src/file-reader.js';
+import readFile, { getPath } from '../src/file-reader.js';
 
-const getFixturePath = (filename) => {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
-  return join(__dirname, '..', '__fixtures__', filename);
-};
+const getFixturePath = (filename) => getPath(filename, '__fixtures__');
 
 const getFile = (name) => {
   const path = getFixturePath(name);
