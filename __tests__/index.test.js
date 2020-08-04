@@ -1,5 +1,5 @@
 import compareFiles from '../index.js';
-import readFile, { getPath } from '../src/file-reader.js';
+import readFile, { getPath } from '../src/fileReader.js';
 
 const getFixturePath = (filename) => getPath(filename, '__fixtures__');
 
@@ -13,7 +13,7 @@ describe('compare files', () => {
   const resultExtensions = ['json', 'yml', 'ini'];
 
   const formatTbl = resultFormats.map((format) => {
-    const result = getFile(`${format}-result.txt`);
+    const result = getFile(`${format}Result.txt`);
     return [format, result];
   });
 

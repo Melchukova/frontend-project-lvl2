@@ -1,5 +1,5 @@
-import readFile from './src/file-reader.js';
-import buildDifferenceTree from './src/objects-difference-builder.js';
+import readFile from './src/fileReader.js';
+import buildDifferenceTree from './src/diffTreeBuilder.js';
 import getFormatter from './src/formatters/index.js';
 
 const findDifference = (pathFile1, pathFile2, format = 'stylish') => {
