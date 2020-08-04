@@ -11,9 +11,7 @@ const getParsedFileContent = (path) => {
   const ext = extname(path);
   const format = ext.substr(1);
 
-  const parse = getParser(format);
-
-  return parse(content);
+  return getParser(format)(content);
 };
 
 const getPath = (name, ...directories) => {

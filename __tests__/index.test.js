@@ -1,11 +1,11 @@
 import compareFiles from '../index.js';
-import readFile, { getPath } from '../src/fileReader.js';
+import getParsedFileContent, { getPath } from '../src/fileReader.js';
 
 const getFixturePath = (filename) => getPath(filename, '__fixtures__');
 
 const getFile = (name) => {
   const path = getFixturePath(name);
-  return readFile(path);
+  return getParsedFileContent(path);
 };
 
 describe('compare files', () => {
