@@ -1,31 +1,33 @@
 import compareFiles from '../index.js';
-import getParsedFileContent, { getPath } from '../src/fileReader.js';
+import { getPath, readFile } from '../src/fileReader.js';
 
 const getFixturePath = (filename) => getPath(filename, '__fixtures__');
 
-const getFile = (name) => {
+const readFixtre = (name) => {
   const path = getFixturePath(name);
-  return getParsedFileContent(path);
+  return readFile(path);
 };
 
-const outputFormats = ['stylish', 'plain', 'json'];
 const inputFormats = ['json', 'yml', 'ini'];
-
-const formatTbl = outputFormats.map((format) => {
-  const result = getFile(`${format}Result.txt`);
-  return [format, result];
-});
-
 const extTbl = inputFormats.map((ext) => {
   const file1Path = getFixturePath(`file1.${ext}`);
   const file2Path = getFixturePath(`file2.${ext}`);
   return [ext, file1Path, file2Path];
 });
 
-describe.each(formatTbl)('output format: %s', (format, result) => {
-  test.each(extTbl)('input format: %s', (ext, file1Path, file2Path) => {
-    const difference = compareFiles(file1Path, file2Path, format);
+describe('gendif', () => {
+  const stylishResult = readFixtre('stylishResult.txt');
+  const plainResult = readFixtre('plainResult.txt');
+  const jsonResult = readFixtre('jsonResult.txt');
 
-    expect(result).toEqual(difference);
+  test.each(extTbl)('input format: %s', (ext, file1Path, file2Path) => {
+    const stylishDifference = compareFiles(file1Path, file2Path, 'stylish');
+    expect(stylishResult).toEqual(stylishDifference);
+
+    const plainDifference = compareFiles(file1Path, file2Path, 'plain');
+    expect(plainResult).toEqual(plainDifference);
+
+    const jsonDifference = compareFiles(file1Path, file2Path, 'json');
+    expect(jsonResult).toEqual(jsonDifference);
   });
 });

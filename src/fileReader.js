@@ -21,4 +21,4 @@ const getPath = (name, ...directories) => {
 };
 
 export default getParsedFileContent;
-export { getPath };
+export { getPath, readFile };
