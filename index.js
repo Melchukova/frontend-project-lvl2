@@ -8,8 +8,8 @@ const genDiff = (pathFile1, pathFile2, outputFormat = 'stylish') => {
   const content2 = readFile(pathFile2);
   const format1 = getFormat(pathFile1);
   const format2 = getFormat(pathFile2);
-  const obj1 = parce(format1)(content1);
-  const obj2 = parce(format2)(content2);
+  const obj1 = parce(content1, format1);
+  const obj2 = parce(content2, format2);
   const tree = buildDifferenceTree(obj1, obj2);
   return format(tree, outputFormat);
 };

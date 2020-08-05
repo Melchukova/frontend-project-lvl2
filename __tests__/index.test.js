@@ -1,17 +1,17 @@
 import compareFiles from '../index.js';
-import { getPath, readFile } from '../src/fileReader.js';
+import { buildPath, readFile } from '../src/fileReader.js';
 
-const getFixturePath = (filename) => getPath(filename, '__fixtures__');
+const buildFixturePath = (filename) => buildPath(filename, '__fixtures__');
 
 const readFixtre = (name) => {
-  const path = getFixturePath(name);
+  const path = buildFixturePath(name);
   return readFile(path);
 };
 
 const inputFormats = ['json', 'yml', 'ini'];
 const extTbl = inputFormats.map((ext) => {
-  const file1Path = getFixturePath(`file1.${ext}`);
-  const file2Path = getFixturePath(`file2.${ext}`);
+  const file1Path = buildFixturePath(`file1.${ext}`);
+  const file2Path = buildFixturePath(`file2.${ext}`);
   return [ext, file1Path, file2Path];
 });
 

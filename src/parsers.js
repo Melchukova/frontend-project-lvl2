@@ -15,28 +15,20 @@ const makeNumbersFromStrings = (obj) => (
   }, {})
 );
 
-const parseIni = (data) => {
-  const parcedData = ini.parse(data);
-  return makeNumbersFromStrings(parcedData);
-};
-
-const parse = (format) => {
-  if (format === 'json') {
-    return JSON.parse;
+const parse = (data, format) => {
+  switch (format) {
+    case 'json':
+      return JSON.parse(data);
+    case 'yml':
+    case 'yaml':
+      return yaml.safeLoad(data);
+    case 'ini': {
+      const parcedData = ini.parse(data);
+      return makeNumbersFromStrings(parcedData);
+    }
+    default:
+      return new Error(`Wrong file format: '${format}'. Correct format is one of [json, yml, ini]`);
   }
-
-  if (format === 'yml' || format === 'yaml') {
-    return yaml.safeLoad;
-  }
-
-  if (format === 'ini') {
-    return parseIni;
-  }
-
-  if (format === 'txt') {
-    return (data) => data;
-  }
-  return new Error(`Wrong file format: '${format}'. Correct format is one of [json, yml, ini]`);
 };
 
 export default parse;

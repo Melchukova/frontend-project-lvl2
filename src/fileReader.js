@@ -6,10 +6,10 @@ const readFile = (path) => fs.readFileSync(path, 'utf-8');
 
 const getFormat = (path) => extname(path).substr(1);
 
-const getPath = (name, ...directories) => {
+const buildPath = (name, ...directories) => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
   return join(__dirname, '..', ...directories, name);
 };
 
-export { getPath, readFile, getFormat };
+export { buildPath, readFile, getFormat };
