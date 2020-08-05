@@ -1,15 +1,17 @@
-import getParsedFileContent from './src/fileReader.js';
+import { readFile, getFormat } from './src/fileReader.js';
+import parce from './src/parsers.js';
 import buildDifferenceTree from './src/diffTreeBuilder.js';
-import getFormatter from './src/formatters/index.js';
+import format from './src/formatters/index.js';
 
-const genDiff = (pathFile1, pathFile2, format = 'stylish') => {
-  const obj1 = getParsedFileContent(pathFile1);
-  const obj2 = getParsedFileContent(pathFile2);
-
+const genDiff = (pathFile1, pathFile2, outputFormat = 'stylish') => {
+  const content1 = readFile(pathFile1);
+  const content2 = readFile(pathFile2);
+  const format1 = getFormat(pathFile1);
+  const format2 = getFormat(pathFile2);
+  const obj1 = parce(format1)(content1);
+  const obj2 = parce(format2)(content2);
   const tree = buildDifferenceTree(obj1, obj2);
-  const differenceStr = getFormatter(format)(tree);
-
-  return differenceStr;
+  return format(tree, outputFormat);
 };
 
 export default genDiff;
