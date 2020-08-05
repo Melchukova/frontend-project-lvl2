@@ -3,16 +3,16 @@ import ini from 'ini';
 import _ from 'lodash';
 
 const makeNumbersFromStrings = (obj) => (
-  Object.entries(obj).reduce((newObj, [key, value]) => {
-    if (!_.isObject(value)) {
-      const num = Number(value);
-      const isNum = !Number.isNaN(num) && typeof value === 'string';
-      const newValue = isNum ? num : value;
-      return { ...newObj, [key]: newValue };
+  _.mapValues(obj, (value) => {
+    if (_.isObject(value)) {
+      return makeNumbersFromStrings(value);
     }
-
-    return { ...newObj, [key]: makeNumbersFromStrings(value) };
-  }, {})
+    // eslint-disable-next-line eqeqeq
+    if (_.isString(value) && +value == value) {
+      return +value;
+    }
+    return value;
+  })
 );
 
 const parse = (data, format) => {
