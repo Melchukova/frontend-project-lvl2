@@ -18,7 +18,7 @@
   "homepage": "https://github.com/Melchukova/frontend-project-lvl2#readme",
   "main": "index.js",
   "bin": {
-    "gendif": "/src/bin/gendif.js"
+    "gendif": "bin/gendif.js"
   },
   "dependencies": {
     "commander": "^5.1.0",
