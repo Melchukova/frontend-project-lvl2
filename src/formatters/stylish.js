@@ -1,11 +1,11 @@
 import _ from 'lodash';
 
-const generateDifStringsForBranch = (indentsAmount, key, value, typeSign) => {
+const formatBranch = (indentsAmount, key, value, typeSign) => {
   const indent = ('  ').repeat(indentsAmount);
   if (!_.isObject(value)) return `${indent}${typeSign} ${key}: ${value}`;
 
   const stringsForValue = Object.entries(value).map(([objKey, objValue]) => (
-    generateDifStringsForBranch(indentsAmount + 2, objKey, objValue, ' ')
+    formatBranch(indentsAmount + 2, objKey, objValue, ' ')
   ));
   return [
     `${indent}${typeSign} ${key}: {`,
@@ -14,25 +14,25 @@ const generateDifStringsForBranch = (indentsAmount, key, value, typeSign) => {
   ];
 };
 
-const generateDifStrings = (indentsAmount, tree) => (
+const formatTree = (indentsAmount, tree) => (
   tree.map((node) => {
     switch (node.type) {
       case 'unchanged':
-        return generateDifStringsForBranch(indentsAmount, node.key, node.value1, ' ');
+        return formatBranch(indentsAmount, node.key, node.value1, ' ');
       case 'added':
-        return generateDifStringsForBranch(indentsAmount, node.key, node.value2, '+');
+        return formatBranch(indentsAmount, node.key, node.value2, '+');
       case 'removed':
-        return generateDifStringsForBranch(indentsAmount, node.key, node.value1, '-');
+        return formatBranch(indentsAmount, node.key, node.value1, '-');
       case 'changed':
         return [
-          generateDifStringsForBranch(indentsAmount, node.key, node.value1, '-'),
-          generateDifStringsForBranch(indentsAmount, node.key, node.value2, '+'),
+          formatBranch(indentsAmount, node.key, node.value1, '-'),
+          formatBranch(indentsAmount, node.key, node.value2, '+'),
         ];
       case 'nested': {
         const indent = ('  ').repeat(indentsAmount);
         return [
           `${indent}  ${node.key}: {`,
-          generateDifStrings(indentsAmount + 2, node.child),
+          formatTree(indentsAmount + 2, node.child),
           `${indent}  }`,
         ];
       }
@@ -42,8 +42,8 @@ const generateDifStrings = (indentsAmount, tree) => (
   })
 );
 
-const generatePrintString = (tree) => {
-  const arrayOfStrings = generateDifStrings(1, tree);
+const generateString = (tree) => {
+  const arrayOfStrings = formatTree(1, tree);
   const arrayOfStringsWithBrackets = [
     '{',
     ...arrayOfStrings,
@@ -55,4 +55,4 @@ const generatePrintString = (tree) => {
   return printString;
 };
 
-export default generatePrintString;
+export default generateString;
