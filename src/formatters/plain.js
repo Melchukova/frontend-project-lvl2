@@ -1,34 +1,34 @@
 import _ from 'lodash';
 
-const stringify = (val) => {
-  if (_.isObject(val)) return '[complex value]';
-  if (_.isString(val)) return `'${val}'`;
-  return val;
+const stringify = (value) => {
+  if (_.isObject(value)) return '[complex value]';
+  if (_.isString(value)) return `'${value}'`;
+  return value;
 };
 
-const generateDifStrings = (path, arr) => (
-  arr.map((obj) => {
-    switch (obj.type) {
+const generateDifStrings = (path, tree) => (
+  tree.map((node) => {
+    switch (node.type) {
       case 'unchanged':
         return [];
       case 'added':
-        return `Property '${path}${obj.key}' was added with value: ${stringify(obj.value2)}`;
+        return `Property '${path}${node.key}' was added with value: ${stringify(node.value2)}`;
       case 'removed':
-        return `Property '${path}${obj.key}' was removed`;
+        return `Property '${path}${node.key}' was removed`;
       case 'changed':
-        return `Property '${path}${obj.key}' was updated. From ${stringify(obj.value1)} to ${stringify(obj.value2)}`;
+        return `Property '${path}${node.key}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
       case 'nested':
-        return generateDifStrings(`${path}${obj.key}.`, obj.child);
+        return generateDifStrings(`${path}${node.key}.`, node.child);
       default:
-        return new Error(`Wrong node type: '${obj.type}'`);
+        return new Error(`Wrong node type: '${node.type}'`);
     }
   })
 );
 
 const generatePrintStr = (tree) => {
-  const arrOfStr = generateDifStrings('', tree);
+  const arrayOfStrings = generateDifStrings('', tree);
 
-  const printString = _.flattenDeep(arrOfStr).join('\n');
+  const printString = _.flattenDeep(arrayOfStrings).join('\n');
 
   return printString;
 };
