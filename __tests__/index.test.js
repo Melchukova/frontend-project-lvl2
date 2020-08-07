@@ -20,10 +20,10 @@ describe('gendif', () => {
     const file2Path = buildFixturePath(`file2.${ext}`);
     expect(stylishResult).toEqual(genDiff(file1Path, file2Path, 'stylish'));
 
-    expect(plainResult).toEqual(genDiff(file1Path, file2Path, 'plain'););
+    expect(plainResult).toEqual(genDiff(file1Path, file2Path, 'plain'));
 
     expect(jsonResult).toEqual(genDiff(file1Path, file2Path, 'json'));
 
-    expect(defaultDifference).toEqual(genDiff(file1Path, file2Path));
+    expect(stylishResult).toEqual(genDiff(file1Path, file2Path));
   });
 });
