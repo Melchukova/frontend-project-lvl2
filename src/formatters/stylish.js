@@ -1,11 +1,11 @@
 import _ from 'lodash';
 
-const generateDifStringsForObj = (indentsAmount, key, value, typeSign) => {
+const generateDifStringsForBranch = (indentsAmount, key, value, typeSign) => {
   const indent = ('  ').repeat(indentsAmount);
   if (!_.isObject(value)) return `${indent}${typeSign} ${key}: ${value}`;
 
   const stringsForValue = Object.entries(value).map(([objKey, objValue]) => (
-    generateDifStringsForObj(indentsAmount + 2, objKey, objValue, ' ')
+    generateDifStringsForBranch(indentsAmount + 2, objKey, objValue, ' ')
   ));
   return [
     `${indent}${typeSign} ${key}: {`,
@@ -14,44 +14,43 @@ const generateDifStringsForObj = (indentsAmount, key, value, typeSign) => {
   ];
 };
 
-const generateDifStringsForArr = (indentsAmount, arr) => (
-  arr.map((obj) => {
-    if (obj.type === 'added') {
-      return generateDifStringsForObj(indentsAmount, obj.key, obj.value2, '+');
+const generateDifStrings = (indentsAmount, tree) => (
+  tree.map((node) => {
+    switch (node.type) {
+      case 'unchanged':
+        return generateDifStringsForBranch(indentsAmount, node.key, node.value1, ' ');
+      case 'added':
+        return generateDifStringsForBranch(indentsAmount, node.key, node.value2, '+');
+      case 'removed':
+        return generateDifStringsForBranch(indentsAmount, node.key, node.value1, '-');
+      case 'changed':
+        return [
+          generateDifStringsForBranch(indentsAmount, node.key, node.value1, '-'),
+          generateDifStringsForBranch(indentsAmount, node.key, node.value2, '+'),
+        ];
+      case 'nested': {
+        const indent = ('  ').repeat(indentsAmount);
+        return [
+          `${indent}  ${node.key}: {`,
+          generateDifStrings(indentsAmount + 2, node.child),
+          `${indent}  }`,
+        ];
+      }
+      default:
+        return new Error(`Wrong node type: '${node.type}'`);
     }
-
-    if (obj.type === 'removed') {
-      return generateDifStringsForObj(indentsAmount, obj.key, obj.value1, '-');
-    }
-
-    if (obj.type === 'changed') {
-      return [
-        generateDifStringsForObj(indentsAmount, obj.key, obj.value1, '-'),
-        generateDifStringsForObj(indentsAmount, obj.key, obj.value2, '+'),
-      ];
-    }
-
-    if (obj.type === 'nested') {
-      const indent = ('  ').repeat(indentsAmount);
-      return [`${indent}  ${obj.key}: {`,
-        generateDifStringsForArr(indentsAmount + 2, obj.child),
-        `${indent}  }`,
-      ];
-    }
-
-    return generateDifStringsForObj(indentsAmount, obj.key, obj.value1, ' ');
   })
 );
 
 const generatePrintString = (tree) => {
-  const arrOfStr = generateDifStringsForArr(1, tree);
-  const arrOfStrWithBrackets = [
+  const arrayOfStrings = generateDifStrings(1, tree);
+  const arrayOfStringsWithBrackets = [
     '{',
-    ...arrOfStr,
+    ...arrayOfStrings,
     '}',
   ];
 
-  const printString = _.flattenDeep(arrOfStrWithBrackets).join('\n');
+  const printString = _.flattenDeep(arrayOfStringsWithBrackets).join('\n');
 
   return printString;
 };
