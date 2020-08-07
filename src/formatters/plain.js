@@ -6,11 +6,11 @@ const stringify = (value) => {
   return value;
 };
 
-const generateDifStrings = (path, tree) => (
-  tree.map((node) => {
+const formatTree = (path, tree) => (
+  tree.flatMap((node) => {
     switch (node.type) {
       case 'unchanged':
-        return [];
+        return null;
       case 'added':
         return `Property '${path}${node.key}' was added with value: ${stringify(node.value2)}`;
       case 'removed':
@@ -18,19 +18,17 @@ const generateDifStrings = (path, tree) => (
       case 'changed':
         return `Property '${path}${node.key}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
       case 'nested':
-        return generateDifStrings(`${path}${node.key}.`, node.child);
+        return formatTree(`${path}${node.key}.`, node.child);
       default:
         return new Error(`Wrong node type: '${node.type}'`);
     }
   })
 );
 
-const generatePrintStr = (tree) => {
-  const arrayOfStrings = generateDifStrings('', tree);
+const generateString = (tree) => {
+  const arrayOfStrings = formatTree('', tree);
 
-  const printString = _.flattenDeep(arrayOfStrings).join('\n');
-
-  return printString;
+  return arrayOfStrings.filter((string) => string !== null).join('\n');
 };
 
-export default generatePrintStr;
+export default generateString;
