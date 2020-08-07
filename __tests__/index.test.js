@@ -1,7 +1,7 @@
 import genDif from '../index.js';
 import { buildPath, readFile } from '../src/fileReader.js';
 
-const buildFixturePath = (filename) => buildPath(`__fixtures__/${filename}`);
+const buildFixturePath = (filename) => buildPath('__fixtures__', filename);
 
 const readFixture = (name) => {
   const path = buildFixturePath(name);

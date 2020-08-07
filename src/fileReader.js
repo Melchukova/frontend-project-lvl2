@@ -9,6 +9,6 @@ const readFile = (path) => fs.readFileSync(path, 'utf-8');
 
 const getFormat = (path) => extname(path).substr(1);
 
-const buildPath = (relativePath) => join(__dirname, '..', relativePath);
+const buildPath = (...segments) => join(__dirname, '..', ...segments);
 
 export { buildPath, readFile, getFormat };
