@@ -1,7 +1,7 @@
 #!/usr/bin/env -S node --experimental-json-modules --no-warnings
 import program from 'commander';
 import packageJson from '../package.json';
-import genDiff from '../index.js';
+import genDif from '../index.js';
 
 program
   .description(packageJson.description)
@@ -10,7 +10,7 @@ program
   .option('-f, --format [type]', 'output format', 'stylish')
   .arguments('<filepath1> <filepath2>')
   .action((filepath1, filepath2, options) => {
-    const difference = genDiff(filepath1, filepath2, options.format);
+    const difference = genDif(filepath1, filepath2, options.format);
     console.log(difference);
   });
 

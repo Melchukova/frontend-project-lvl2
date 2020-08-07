@@ -3,7 +3,7 @@ import parce from './src/parsers.js';
 import buildDifferenceTree from './src/diffTreeBuilder.js';
 import format from './src/formatters/index.js';
 
-const genDiff = (pathFile1, pathFile2, outputFormat = 'stylish') => {
+const genDif = (pathFile1, pathFile2, outputFormat = 'stylish') => {
   const content1 = readFile(pathFile1);
   const content2 = readFile(pathFile2);
   const format1 = getFormat(pathFile1);
@@ -14,4 +14,4 @@ const genDiff = (pathFile1, pathFile2, outputFormat = 'stylish') => {
   return format(tree, outputFormat);
 };
 
-export default genDiff;
+export default genDif;

@@ -1,4 +1,4 @@
-import genDiff from '../index.js';
+import genDif from '../index.js';
 import { buildPath, readFile } from '../src/fileReader.js';
 
 const buildFixturePath = (filename) => buildPath(filename, '__fixtures__');
@@ -18,16 +18,16 @@ describe('gendif', () => {
   test.each(inputFormats)('input format: %s', (ext) => {
     const file1Path = buildFixturePath(`file1.${ext}`);
     const file2Path = buildFixturePath(`file2.${ext}`);
-    const stylishDifference = genDiff(file1Path, file2Path, 'stylish');
+    const stylishDifference = genDif(file1Path, file2Path, 'stylish');
     expect(stylishResult).toEqual(stylishDifference);
 
-    const plainDifference = genDiff(file1Path, file2Path, 'plain');
+    const plainDifference = genDif(file1Path, file2Path, 'plain');
     expect(plainResult).toEqual(plainDifference);
 
-    const jsonDifference = genDiff(file1Path, file2Path, 'json');
+    const jsonDifference = genDif(file1Path, file2Path, 'json');
     expect(jsonResult).toEqual(jsonDifference);
 
-    const defaultDifference = genDiff(file1Path, file2Path);
+    const defaultDifference = genDif(file1Path, file2Path);
     expect(defaultDifference).toEqual(stylishDifference);
   });
 });
