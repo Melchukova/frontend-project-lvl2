@@ -2,17 +2,10 @@ import yaml from 'js-yaml';
 import ini from 'ini';
 import _ from 'lodash';
 
-const makeNumbersFromStrings = (obj) => (
-  _.mapValues(obj, (value) => {
-    if (_.isObject(value)) {
-      return makeNumbersFromStrings(value);
-    }
-    // eslint-disable-next-line eqeqeq
-    if (_.isString(value) && +value == value) {
-      return +value;
-    }
-    return value;
-  })
+const numberfyValues = (obj) => (
+  _.mapValues(obj, (value) => (
+    _.isObject(value) ? numberfyValues(value) : parseFloat(value) || value
+  ))
 );
 
 const parse = (data, format) => {
@@ -23,8 +16,7 @@ const parse = (data, format) => {
     case 'yaml':
       return yaml.safeLoad(data);
     case 'ini': {
-      const parcedData = ini.parse(data);
-      return makeNumbersFromStrings(parcedData);
+      return numberfyValues(ini.parse(data));
     }
     default:
       return new Error(`Wrong file format: '${format}'. Correct format is one of [json, yml, ini]`);
