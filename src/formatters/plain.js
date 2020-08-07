@@ -1,31 +1,27 @@
 import _ from 'lodash';
 
-const generateValStr = (val) => {
+const stringify = (val) => {
   if (_.isObject(val)) return '[complex value]';
-  if (typeof val === 'string') return `'${val}'`;
+  if (_.isString(val)) return `'${val}'`;
   return val;
 };
 
 const generateDifStrings = (path, arr) => (
   arr.map((obj) => {
-    if (obj.type === 'added') {
-      return `Property '${path}${obj.key}' was added with value: ${generateValStr(obj.value2)}`;
+    switch (obj.type) {
+      case 'unchanged':
+        return [];
+      case 'added':
+        return `Property '${path}${obj.key}' was added with value: ${stringify(obj.value2)}`;
+      case 'removed':
+        return `Property '${path}${obj.key}' was removed`;
+      case 'changed':
+        return `Property '${path}${obj.key}' was updated. From ${stringify(obj.value1)} to ${stringify(obj.value2)}`;
+      case 'nested':
+        return generateDifStrings(`${path}${obj.key}.`, obj.child);
+      default:
+        return new Error(`Wrong node type: '${obj.type}'`);
     }
-
-    if (obj.type === 'removed') {
-      return `Property '${path}${obj.key}' was removed`;
-    }
-
-    if (obj.type === 'changed') {
-      return `Property '${path}${obj.key}' was updated. From ${generateValStr(obj.value1)} to ${generateValStr(obj.value2)}`;
-    }
-
-    if (obj.type === 'nested') {
-      const newPath = `${path}${obj.key}.`;
-      return generateDifStrings(newPath, obj.child);
-    }
-
-    return [];
   })
 );
 
