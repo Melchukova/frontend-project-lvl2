@@ -7,6 +7,7 @@ const formatBranch = (indentsAmount, key, value, typeSign) => {
   const stringsForValue = Object.entries(value).flatMap(([objKey, objValue]) => (
     formatBranch(indentsAmount + 2, objKey, objValue, ' ')
   ));
+
   return [
     `${indent}${typeSign} ${key}: {`,
     ...stringsForValue,
@@ -49,7 +50,6 @@ const generateString = (tree) => {
     ...arrayOfStrings,
     '}',
   ];
-  console.log('arrayOfStrings', arrayOfStrings);
   return arrayOfStringsWithBrackets.join('\n');
 };
 
