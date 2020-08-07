@@ -10,7 +10,7 @@ const format = (data, outputFormat) => {
     case 'json':
       return JSON.stringify(data);
     default:
-      throw new Error(`Wrong format '${outputFormat}'. Correct format is one of [stylsh, plain]`);
+      throw new Error(`Wrong output format '${outputFormat}`);
   }
 };
 
