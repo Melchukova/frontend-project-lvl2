@@ -19,7 +19,7 @@ const parse = (data, format) => {
       return numberfyValues(ini.parse(data));
     }
     default:
-      return new Error(`Wrong file format: '${format}'. Correct format is one of [json, yml, ini]`);
+      return new Error(`Wrong input format: '${format}'`);
   }
 };
 
