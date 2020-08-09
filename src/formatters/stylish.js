@@ -49,10 +49,6 @@ const formatTree = (indentsSize, tree) => {
   return `{\n${arr.join('\n')}\n${indent(indentsSize - 1)}}`;
 };
 
-const generateString = (tree) => {
-  const res = formatTree(1, tree);
-  console.log('res\n', res);
-  return res;
-};
+const generateString = (tree) => formatTree(1, tree);
 
 export default generateString;
