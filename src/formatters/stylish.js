@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
-const indent = (size) => ('  ').repeat(size);
+const getIndent = (size) => ('  ').repeat(size);
 
-const formatKey = (key, typeSign, indentsSize) => `${indent(indentsSize)}${typeSign} ${key}`;
+const formatKey = (key, typeSign, indentsSize) => `${getIndent(indentsSize)}${typeSign} ${key}`;
 
 const formatValue = (indentsSize, value) => {
   if (_.isArray(value)) {
@@ -13,12 +13,12 @@ const formatValue = (indentsSize, value) => {
     return value;
   }
 
-  const stringsForValue = Object.entries(value).map(([objectKey, objectValue]) => (
+  const diffString = Object.entries(value).map(([objectKey, objectValue]) => (
     // eslint-disable-next-line no-use-before-define
     formatBranch(indentsSize + 2, objectKey, objectValue)
-  ));
+  )).join('\n');
 
-  return `{\n${stringsForValue.join('\n')}\n${indent(indentsSize + 1)}}`;
+  return `{\n${diffString}\n${getIndent(indentsSize + 1)}}`;
 };
 
 const formatBranch = (indentsSize, key, value, typeSign = ' ') => (
@@ -26,7 +26,7 @@ const formatBranch = (indentsSize, key, value, typeSign = ' ') => (
 );
 
 const formatTree = (indentsSize, tree) => {
-  const arr = tree.flatMap((node) => {
+  const diffString = tree.flatMap((node) => {
     switch (node.type) {
       case 'unchanged':
         return formatBranch(indentsSize, node.key, node.value1, ' ');
@@ -44,9 +44,9 @@ const formatTree = (indentsSize, tree) => {
       default:
         return new Error(`Wrong node type: '${node.type}'`);
     }
-  });
+  }).join('\n');
 
-  return `{\n${arr.join('\n')}\n${indent(indentsSize - 1)}}`;
+  return `{\n${diffString}\n${getIndent(indentsSize - 1)}}`;
 };
 
 const generateString = (tree) => formatTree(1, tree);
