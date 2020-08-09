@@ -1,56 +1,58 @@
 import _ from 'lodash';
 
-const formatBranch = (indentsAmount, key, value, typeSign) => {
-  const indent = ('  ').repeat(indentsAmount);
-  if (!_.isObject(value)) return [`${indent}${typeSign} ${key}: ${value}`];
+const indent = (size) => ('  ').repeat(size);
 
-  const stringsForValue = Object.entries(value).flatMap(([objKey, objValue]) => (
-    formatBranch(indentsAmount + 2, objKey, objValue, ' ')
+const formatKey = (key, typeSign, indentsSize) => `${indent(indentsSize)}${typeSign} ${key}`;
+
+const formatValue = (indentsSize, value) => {
+  if (_.isArray(value)) {
+    return `[${value.join(', ')}]`;
+  }
+
+  if (!_.isObject(value)) {
+    return value;
+  }
+
+  const stringsForValue = Object.entries(value).map(([objectKey, objectValue]) => (
+    // eslint-disable-next-line no-use-before-define
+    formatBranch(indentsSize + 2, objectKey, objectValue)
   ));
 
-  return [
-    `${indent}${typeSign} ${key}: {`,
-    ...stringsForValue,
-    `${indent}  }`,
-  ];
+  return `{\n${stringsForValue.join('\n')}\n${indent(indentsSize + 1)}}`;
 };
 
-const formatTree = (indentsAmount, tree) => (
-  tree.flatMap((node) => {
+const formatBranch = (indentsSize, key, value, typeSign = ' ') => (
+  `${formatKey(key, typeSign, indentsSize)}: ${formatValue(indentsSize, value)}`
+);
+
+const formatTree = (indentsSize, tree) => {
+  const arr = tree.flatMap((node) => {
     switch (node.type) {
       case 'unchanged':
-        return formatBranch(indentsAmount, node.key, node.value1, ' ');
+        return formatBranch(indentsSize, node.key, node.value1, ' ');
       case 'added':
-        return formatBranch(indentsAmount, node.key, node.value2, '+');
+        return formatBranch(indentsSize, node.key, node.value2, '+');
       case 'removed':
-        return formatBranch(indentsAmount, node.key, node.value1, '-');
+        return formatBranch(indentsSize, node.key, node.value1, '-');
       case 'changed':
         return [
-          ...formatBranch(indentsAmount, node.key, node.value1, '-'),
-          ...formatBranch(indentsAmount, node.key, node.value2, '+'),
+          formatBranch(indentsSize, node.key, node.value1, '-'),
+          formatBranch(indentsSize, node.key, node.value2, '+'),
         ];
-      case 'nested': {
-        const indent = ('  ').repeat(indentsAmount);
-        return [
-          `${indent}  ${node.key}: {`,
-          ...formatTree(indentsAmount + 2, node.child),
-          `${indent}  }`,
-        ];
-      }
+      case 'nested':
+        return `${formatKey(node.key, ' ', indentsSize)}: ${formatTree(indentsSize + 2, node.child)}`;
       default:
         return new Error(`Wrong node type: '${node.type}'`);
     }
-  })
-);
+  });
+
+  return `{\n${arr.join('\n')}\n${indent(indentsSize - 1)}}`;
+};
 
 const generateString = (tree) => {
-  const arrayOfStrings = formatTree(1, tree);
-  const arrayOfStringsWithBrackets = [
-    '{',
-    ...arrayOfStrings,
-    '}',
-  ];
-  return arrayOfStringsWithBrackets.join('\n');
+  const res = formatTree(1, tree);
+  console.log('res\n', res);
+  return res;
 };
 
 export default generateString;
