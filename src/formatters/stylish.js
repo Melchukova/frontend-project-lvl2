@@ -5,10 +5,6 @@ const getIndent = (size) => ('  ').repeat(size);
 const formatKey = (key, typeSign, indentsSize) => `${getIndent(indentsSize)}${typeSign} ${key}`;
 
 const formatValue = (indentsSize, value) => {
-  if (_.isArray(value)) {
-    return `[${value.join(', ')}]`;
-  }
-
   if (!_.isObject(value)) {
     return value;
   }
