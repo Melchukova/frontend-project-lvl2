@@ -1,50 +1,62 @@
 import _ from 'lodash';
 
-const getIndent = (size) => ('  ').repeat(size);
+const signs = {
+  unchanged: ' ',
+  added: '+',
+  removed: '-',
+};
+const bracket = {
+  open: '{',
+  close: '}',
+};
+const space = 2;
+const indent = '  ';
+const getIndents = (spaces) => indent.repeat(spaces);
 
-const keyStringify = (key, typeSign, indentsSize) => `${getIndent(indentsSize)}${typeSign} ${key}`;
+const keyStringify = (key, sign, indents) => `${indents}${indent}${sign} ${key}`;
 
-const valueStringify = (value, gap, indentsSize) => {
+const valueStringify = (value, sign, spaces) => {
   if (!_.isObject(value)) {
     return value;
   }
 
   const diffString = Object.entries(value).map(([objectKey, objectValue]) => (
     // eslint-disable-next-line no-use-before-define
-    branchStringify(indentsSize + 2, objectKey, objectValue, gap)
+    branchStringify(objectKey, objectValue, sign, spaces + space)
   )).join('\n');
 
-  return `{\n${diffString}\n${getIndent(indentsSize + 1)}}`;
+  return `${bracket.open}\n${diffString}\n${getIndents(spaces + space)}${bracket.close}`;
 };
 
-const branchStringify = (indentsSize, key, value, typeSign) => (
-  `${keyStringify(key, typeSign, indentsSize)}: ${valueStringify(value, ' ', indentsSize)}`
+const branchStringify = (key, value, sign, spaces) => (
+  `${keyStringify(key, sign, getIndents(spaces))}: ${valueStringify(value, signs.unchanged, spaces)}`
 );
 
-const formatTree = (indentsSize, tree) => {
+const formatTree = (tree, spaces) => {
+  const indents = getIndents(spaces);
   const diffString = tree.flatMap((node) => {
     switch (node.type) {
       case 'unchanged':
-        return branchStringify(indentsSize, node.key, node.value1, ' ');
+        return branchStringify(node.key, node.value1, signs.unchanged, spaces);
       case 'added':
-        return branchStringify(indentsSize, node.key, node.value2, '+');
+        return branchStringify(node.key, node.value2, signs.added, spaces);
       case 'removed':
-        return branchStringify(indentsSize, node.key, node.value1, '-');
+        return branchStringify(node.key, node.value1, signs.removed, spaces);
       case 'changed':
         return [
-          branchStringify(indentsSize, node.key, node.value1, '-'),
-          branchStringify(indentsSize, node.key, node.value2, '+'),
+          branchStringify(node.key, node.value1, signs.removed, spaces),
+          branchStringify(node.key, node.value2, signs.added, spaces),
         ];
       case 'nested':
-        return `${keyStringify(node.key, ' ', indentsSize)}: ${formatTree(indentsSize + 2, node.child)}`;
+        return `${keyStringify(node.key, ' ', indents)}: ${formatTree(node.child, spaces + space)}`;
       default:
         return new Error(`Wrong node type: '${node.type}'`);
     }
   }).join('\n');
 
-  return `{\n${diffString}\n${getIndent(indentsSize - 1)}}`;
+  return `${bracket.open}\n${diffString}\n${indents}${bracket.close}`;
 };
 
-const generateString = (tree) => formatTree(1, tree);
+const generateString = (tree) => formatTree(tree, 0);
 
 export default generateString;
