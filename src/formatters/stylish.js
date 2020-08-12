@@ -22,14 +22,14 @@ const valueStringify = (value, sign, spaces) => {
 
   const diffString = Object.entries(value).map(([objectKey, objectValue]) => (
     // eslint-disable-next-line no-use-before-define
-    branchStringify(objectKey, objectValue, sign, spaces + space)
+    branchStringify(objectKey, objectValue, sign, spaces)
   )).join('\n');
 
-  return `${bracket.open}\n${diffString}\n${getIndents(spaces + space)}${bracket.close}`;
+  return `${bracket.open}\n${diffString}\n${getIndents(spaces)}${bracket.close}`;
 };
 
 const branchStringify = (key, value, sign, spaces) => (
-  `${keyStringify(key, sign, getIndents(spaces))}: ${valueStringify(value, signs.unchanged, spaces)}`
+  `${keyStringify(key, sign, getIndents(spaces))}: ${valueStringify(value, signs.unchanged, spaces + space)}`
 );
 
 const formatTree = (tree, spaces) => {
