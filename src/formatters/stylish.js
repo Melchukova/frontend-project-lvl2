@@ -15,7 +15,7 @@ const defaultGap = '  ';
 
 const getIndents = (gap, spaces) => gap.repeat(spaces);
 
-const keyStringify = (key, sign, gap, spaces) => `${sign.padStart(spaces * gap.length, ' ')}${key}`;
+const keyStringify = (key, sign, gap, spaces) => `${sign.padStart(spaces * gap.length, gap)}${key}`;
 
 const valueStringify = (value, gap, spaces) => {
   if (!_.isObject(value)) {
