@@ -6,7 +6,7 @@ const stringify = (value) => {
   return value;
 };
 
-const formatTree = (path, tree) => (
+const formatTree = (tree, path) => (
   tree.flatMap((node) => {
     switch (node.type) {
       case 'unchanged':
@@ -18,17 +18,17 @@ const formatTree = (path, tree) => (
       case 'changed':
         return `Property '${path}${node.key}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
       case 'nested':
-        return formatTree(`${path}${node.key}.`, node.child);
+        return formatTree(node.child, `${path}${node.key}.`);
       default:
         return new Error(`Wrong node type: '${node.type}'`);
     }
   })
 );
 
-const generateString = (tree) => {
-  const arrayOfStrings = formatTree('', tree);
+const formatPlain = (tree) => {
+  const arrayOfStrings = formatTree(tree, '');
 
   return arrayOfStrings.filter((string) => string !== null).join('\n');
 };
 
-export default generateString;
+export default formatPlain;

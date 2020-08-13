@@ -1,12 +1,12 @@
-import { generateString as stylish } from './stylish.js';
-import plain from './plain.js';
+import formatStylish from './stylish.js';
+import formatPlain from './plain.js';
 
 const format = (data, outputFormat) => {
   switch (outputFormat) {
     case 'stylish':
-      return stylish(data);
+      return formatStylish(data);
     case 'plain':
-      return plain(data);
+      return formatPlain(data);
     case 'json':
       return JSON.stringify(data);
     default:
