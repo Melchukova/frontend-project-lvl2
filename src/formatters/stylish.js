@@ -29,35 +29,35 @@ const stringify = (obj, gap) => {
   return lines.join('\n');
 };
 
-const iter = (subTree, gap) => {
-  const currentGap = gap === '' ? gapSymbol : addPrefix(gapSymbol, gap);
-  const lines = [
-    openSymbol,
-    ...subTree.flatMap((node) => {
+const formatStylish = (tree) => {
+  const iter = (branch, gap) => (
+    branch.flatMap((node) => {
       switch (node.type) {
         case 'unchanged':
-          return `${addPrefix(node.key, currentGap, signs.unchanged)}: ${stringify(node.value1, currentGap)}`;
+          return `${addPrefix(node.key, gap, signs.unchanged)}: ${stringify(node.value1, gap)}`;
         case 'added':
-          return `${addPrefix(node.key, currentGap, signs.added)}: ${stringify(node.value2, currentGap)}`;
+          return `${addPrefix(node.key, gap, signs.added)}: ${stringify(node.value2, gap)}`;
         case 'removed':
-          return `${addPrefix(node.key, currentGap, signs.removed)}: ${stringify(node.value1, currentGap)}`;
+          return `${addPrefix(node.key, gap, signs.removed)}: ${stringify(node.value1, gap)}`;
         case 'changed':
           return [
-            `${addPrefix(node.key, currentGap, signs.removed)}: ${stringify(node.value1, currentGap)}`,
-            `${addPrefix(node.key, currentGap, signs.added)}: ${stringify(node.value2, currentGap)}`,
+            `${addPrefix(node.key, gap, signs.removed)}: ${stringify(node.value1, gap)}`,
+            `${addPrefix(node.key, gap, signs.added)}: ${stringify(node.value2, gap)}`,
           ];
         case 'nested':
-          return `${addPrefix(node.key, currentGap, signs.unchanged)}: ${iter(node.child, currentGap)}`;
+          return [
+            `${addPrefix(node.key, gap, signs.unchanged)}: ${openSymbol}`,
+            ...iter(node.child, addPrefix(gapSymbol, gap)),
+            addPrefix(closeSymbol, gap),
+          ];
         default:
           return new Error(`Wrong node type: '${node.type}'`);
       }
-    }),
-    gap === '' ? closeSymbol : addPrefix(closeSymbol, gap),
-  ];
+    })
+  );
 
-  return lines.join('\n');
+  const lines = iter(tree, '  ');
+  return [openSymbol, ...lines, closeSymbol];
 };
 
-const formatStylish = (tree) => iter(tree, '');
-
-export default formatStylish;
+export default (tree) => formatStylish(tree).join('\n');
