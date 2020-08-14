@@ -26,7 +26,7 @@ const formatPlain = (tree) => {
     })
   );
 
-  return iter(tree, '');
+  return iter(tree, '').filter((line) => line);
 };
 
-export default (tree) => formatPlain(tree).filter((line) => line).join('\n');
+export default (tree) => formatPlain(tree).join('\n');
