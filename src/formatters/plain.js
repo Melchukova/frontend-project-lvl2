@@ -6,29 +6,27 @@ const stringify = (value) => {
   return value;
 };
 
-const formatTree = (tree, path) => (
-  tree.flatMap((node) => {
-    switch (node.type) {
-      case 'unchanged':
-        return null;
-      case 'added':
-        return `Property '${path}${node.key}' was added with value: ${stringify(node.value2)}`;
-      case 'removed':
-        return `Property '${path}${node.key}' was removed`;
-      case 'changed':
-        return `Property '${path}${node.key}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
-      case 'nested':
-        return formatTree(node.child, `${path}${node.key}.`);
-      default:
-        return new Error(`Wrong node type: '${node.type}'`);
-    }
-  })
-);
-
 const formatPlain = (tree) => {
-  const arrayOfStrings = formatTree(tree, '');
+  const iter = (branch, path) => (
+    branch.flatMap((node) => {
+      switch (node.type) {
+        case 'unchanged':
+          return null;
+        case 'added':
+          return `Property '${path}${node.key}' was added with value: ${stringify(node.value2)}`;
+        case 'removed':
+          return `Property '${path}${node.key}' was removed`;
+        case 'changed':
+          return `Property '${path}${node.key}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
+        case 'nested':
+          return iter(node.child, `${path}${node.key}.`);
+        default:
+          return new Error(`Wrong node type: '${node.type}'`);
+      }
+    })
+  );
 
-  return arrayOfStrings.filter((string) => string !== null).join('\n');
+  return iter(tree, '');
 };
 
-export default formatPlain;
+export default (tree) => formatPlain(tree).filter((line) => line).join('\n');
