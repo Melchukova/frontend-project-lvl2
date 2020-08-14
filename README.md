@@ -18,7 +18,7 @@ make install link
 ```
 ____
 ### Демонстрация
-| Дйствие | |
+| Действие | |
 |----|----|
 | вывод справки и версии | [![asciicast](    https://asciinema.org/a/oFFWz16SBcn62wb0NZ9SolkY1.png)](https://asciinema.org/a/oFFWz16SBcn62wb0NZ9SolkY1) |
 | сравнение JSON | [![asciicast](https://asciinema.org/a/Tc6r70PdAoGp1LBpn4SGcmu16.png)](https://asciinema.org/a/Tc6r70PdAoGp1LBpn4SGcmu16) |
