@@ -1,66 +1,67 @@
 import _ from 'lodash';
 
 const signs = {
-  unchanged: '  ',
-  added: '+ ',
-  removed: '- ',
-  empty: '',
+  unchanged: ' ',
+  added: '+',
+  removed: '-',
 };
-const bracket = {
-  open: '{',
-  close: '}',
-};
-const space = 4;
-const gap = ' ';
+const openSymbol = '{';
+const closeSymbol = '}';
+const keyOffset = 4;
+const gapSymbol = ' ';
 
-const getIndents = (level) => gap.repeat(level * space);
+const addIndent = (key, level, sign = '') => `${sign.padStart(keyOffset * level - 1, gapSymbol)} ${key}`;
 
-const keyStringify = (key, sign, level) => `${sign.padStart(space * level, gap)}${key}`;
-
-const valueStringify = (value, level = 1) => {
+const stringify = (value, level) => {
   if (!_.isObject(value)) {
     return value;
   }
 
-  const diffString = Object.entries(value).map(([objectKey, objectValue]) => (
-    // eslint-disable-next-line no-use-before-define
-    branchStringify(objectKey, objectValue, signs.empty, level)
-  )).join('\n');
+  const lines = [
+    openSymbol,
+    ...Object.entries(value).map(([objectKey, objectValue]) => (
+      // eslint-disable-next-line no-use-before-define
+      branchStringify(objectKey, objectValue, level)
+    )),
+    addIndent(closeSymbol, level - 1),
+  ];
 
-  return `${bracket.open}\n${diffString}\n${getIndents(level - 1)}${bracket.close}`;
+  return lines.join('\n');
 };
 
-const branchStringify = (key, value, sign, level) => (
-  `${keyStringify(key, sign, level)}: ${valueStringify(value, level + 1)}`
+const branchStringify = (key, value, level, sign) => (
+  `${addIndent(key, level, sign)}: ${stringify(value, level + 1)}`
 );
 
-const formatTree = (tree, level) => {
-  const diffString = tree.flatMap((node) => {
-    switch (node.type) {
-      case 'unchanged':
-        return branchStringify(node.key, node.value1, signs.unchanged, level);
-      case 'added':
-        return branchStringify(node.key, node.value2, signs.added, level);
-      case 'removed':
-        return branchStringify(node.key, node.value1, signs.removed, level);
-      case 'changed':
-        return [
-          branchStringify(node.key, node.value1, signs.removed, level),
-          branchStringify(node.key, node.value2, signs.added, level),
-        ];
-      case 'nested': {
-        const key = keyStringify(node.key, signs.unchanged, level);
-        const value = formatTree(node.child, level + 1);
-        return `${key}: ${value}`;
+const iter = (tree, level) => {
+  const lines = [
+    openSymbol,
+    ...tree.flatMap((node) => {
+      switch (node.type) {
+        case 'unchanged':
+          return branchStringify(node.key, node.value1, level, signs.unchanged);
+        case 'added':
+          return branchStringify(node.key, node.value2, level, signs.added);
+        case 'removed':
+          return branchStringify(node.key, node.value1, level, signs.removed);
+        case 'changed':
+          return [
+            branchStringify(node.key, node.value1, level, signs.removed),
+            branchStringify(node.key, node.value2, level, signs.added),
+          ];
+        case 'nested': {
+          return `${addIndent(node.key, level)}: ${iter(node.child, level + 1)}`;
+        }
+        default:
+          return new Error(`Wrong node type: '${node.type}'`);
       }
-      default:
-        return new Error(`Wrong node type: '${node.type}'`);
-    }
-  }).join('\n');
+    }),
+    level === 1 ? closeSymbol : addIndent(closeSymbol, level - 1),
+  ];
 
-  return `${bracket.open}\n${diffString}\n${getIndents(level - 1)}${bracket.close}`;
+  return lines.join('\n');
 };
 
-const generateString = (tree) => formatTree(tree, 1);
+const formatStylish = (tree) => iter(tree, 1);
 
-export { generateString, valueStringify };
+export default formatStylish;
