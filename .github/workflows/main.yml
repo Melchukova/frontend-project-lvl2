@@ -5,7 +5,7 @@ on:
   
 
 jobs:
-  make-lint:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,7 +14,7 @@ jobs:
       with:
         node-version: 14
 
-    - name: install
+    - name: install packages & dependencies
       run:
         make install
 
@@ -22,11 +22,7 @@ jobs:
       run: 
         make lint
 
-    - name: test gendif
-      run: 
-        make test
-
-    - name: coverage
+    - name: test & coverage
       uses: paambaati/codeclimate-action@v2.6.0
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
